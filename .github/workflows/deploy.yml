@@ -19,9 +19,6 @@ jobs:
                   php-version: "8.3"
                   extensions: mbstring, bcmath, xml, ctype, json, gd, pdo_mysql, curl, zip
 
-            - name: Install Composer dependencies
-              run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
-
             - name: Deploy to VPS via SFTP
               uses: wlixcc/SFTP-Deploy-Action@v1.2.4
               with:
@@ -40,8 +37,12 @@ jobs:
                   host: ${{ secrets.SERVER_IP }}
                   username: ${{ secrets.SERVER_USER }}
                   key: ${{ secrets.SERVER_SSH_KEY }}
+                  port: ${{ secrets.SERVER_PORT }}
                   script: |
                       cd /home/clenicapp.com/public_html/ws.clenicapp.com
+
+                      # Install/update composer dependencies
+                      composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
                       # Set kepemilikan ke www-data (user web server)
                       sudo chown -R www-data:www-data /home/clenicapp.com/public_html/ws.clenicapp.com
