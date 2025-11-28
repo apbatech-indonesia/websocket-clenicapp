@@ -22,26 +22,17 @@ jobs:
             - name: Install Composer dependencies
               run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-            - name: Deploy to VPS via SFTP
-              uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+            - name: Deploy to VPS via rsync
+              uses: easingthemes/ssh-deploy@v5.0.3
               with:
-                  username: ${{ secrets.SERVER_USER }}
-                  server: ${{ secrets.SERVER_IP }}
-                  port: ${{ secrets.SERVER_PORT }}
-                  ssh_private_key: ${{ secrets.SERVER_SSH_KEY }}
-                  local_path: "./*"
-                  remote_path: "/home/clenicapp.com/public_html/ws.clenicapp.com"
-                  sftp_only: true
-                  args: "-o ConnectTimeout=5"
-
-            - name: Run deployment commands
-              uses: appleboy/ssh-action@v1.0.0
-              with:
-                  host: ${{ secrets.SERVER_IP }}
-                  username: ${{ secrets.SERVER_USER }}
-                  key: ${{ secrets.SERVER_SSH_KEY }}
-                  port: ${{ secrets.SERVER_PORT }}
-                  script: |
+                  SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+                  REMOTE_HOST: ${{ secrets.SERVER_IP }}
+                  REMOTE_USER: ${{ secrets.SERVER_USER }}
+                  REMOTE_PORT: ${{ secrets.SERVER_PORT }}
+                  TARGET: /home/clenicapp.com/public_html/ws.clenicapp.com
+                  ARGS: "-avzr --delete --exclude='.git*' --exclude='storage/' --exclude='.env'"
+                  SOURCE: "./"
+                  SCRIPT_AFTER: |
                       cd /home/clenicapp.com/public_html/ws.clenicapp.com
 
                       # Set permission
