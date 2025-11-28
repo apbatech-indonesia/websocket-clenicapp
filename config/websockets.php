@@ -110,24 +110,11 @@ return [
      * You can see all available options at: http://php.net/manual/en/context.ssl.php
      */
     'ssl' => [
-        /*
-         * Path to local certificate file on filesystem. It must be a PEM encoded file which
-         * contains your certificate and private key. It can optionally contain the
-         * certificate chain of issuers. The private key also may be contained
-         * in a separate file specified by local_pk.
-         */
-        'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
-
-        /*
-         * Path to local private key file on filesystem in case of separate files for
-         * certificate (local_cert) and private key.
-         */
-        'local_pk' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_PK', null),
-
-        /*
-         * Passphrase for your local_cert file.
-         */
-        'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
+        // Path to SSL certificate & key, ambil dari .env (WEBSOCKET_SSL_LOCAL_CERT, WEBSOCKET_SSL_LOCAL_PK, WEBSOCKET_SSL_PASSPHRASE)
+        'local_cert' => env('WEBSOCKET_SSL_LOCAL_CERT', env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null)),
+        'local_pk' => env('WEBSOCKET_SSL_LOCAL_PK', env('LARAVEL_WEBSOCKETS_SSL_LOCAL_PK', null)),
+        'passphrase' => env('WEBSOCKET_SSL_PASSPHRASE', env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null)),
+        'verify_peer' => false,
     ],
 
     /*
