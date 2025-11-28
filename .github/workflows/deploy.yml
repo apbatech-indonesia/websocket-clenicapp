@@ -41,31 +41,27 @@ jobs:
                   script: |
                       cd /home/clenicapp.com/public_html/ws.clenicapp.com
 
-                      # Install/update composer dependencies
-                      composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+                      # Use PHP 8.1 or higher (sesuaikan path PHP di server)
+                      export PATH=/usr/local/lsws/lsphp81/bin:$PATH
 
-                      # Set kepemilikan ke www-data (user web server)
-                      sudo chown -R www-data:www-data /home/clenicapp.com/public_html/ws.clenicapp.com
+                      # Install/update composer dependencies with PHP 8.1+
+                      /usr/local/lsws/lsphp81/bin/php /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-                      # Atur permission file & folder
-                      sudo find /home/clenicapp.com/public_html/ws.clenicapp.com -type f -exec chmod 644 {} \;
-                      sudo find /home/clenicapp.com/public_html/ws.clenicapp.com -type d -exec chmod 755 {} \;
-
-                      # Kasih akses tulis untuk storage & bootstrap/cache
-                      sudo chgrp -R www-data storage bootstrap/cache
-                      sudo chmod -R ug+rwx storage bootstrap/cache
+                      # Set permission tanpa sudo (user harus punya akses)
+                      chmod -R 755 /home/clenicapp.com/public_html/ws.clenicapp.com
+                      chmod -R 775 storage bootstrap/cache
 
                       # Maintenance mode ON
-                      php artisan down || true
+                      /usr/local/lsws/lsphp81/bin/php artisan down || true
 
                       # Migrasi & optimize
-                      php artisan migrate --force
-                      php artisan config:cache
-                      php artisan route:cache
-                      php artisan view:cache
-                      php artisan storage:link
-                      php artisan optimize:clear
-                      php artisan optimize
+                      /usr/local/lsws/lsphp81/bin/php artisan migrate --force
+                      /usr/local/lsws/lsphp81/bin/php artisan config:cache
+                      /usr/local/lsws/lsphp81/bin/php artisan route:cache
+                      /usr/local/lsws/lsphp81/bin/php artisan view:cache
+                      /usr/local/lsws/lsphp81/bin/php artisan storage:link
+                      /usr/local/lsws/lsphp81/bin/php artisan optimize:clear
+                      /usr/local/lsws/lsphp81/bin/php artisan optimize
 
                       # Maintenance mode OFF
-                      php artisan up
+                      /usr/local/lsws/lsphp81/bin/php artisan up
