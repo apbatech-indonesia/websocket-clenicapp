@@ -31,8 +31,8 @@ jobs:
                   ssh_private_key: ${{ secrets.SERVER_SSH_KEY }}
                   local_path: "./*"
                   remote_path: "/home/clenicapp.com/public_html/ws.clenicapp.com"
-                  sftpArgs: "-o ConnectTimeout=5"
-                  delete_remote_files: true
+                  sftp_only: true
+                  args: "-o ConnectTimeout=5"
 
             - name: Run deployment commands
               uses: appleboy/ssh-action@v1.0.0
