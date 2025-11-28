@@ -39,7 +39,7 @@ jobs:
 
                       # Create database directory if not exists
                       mkdir -p database
-                      
+
                       # Create SQLite database file if not exists
                       touch database/database.sqlite
 
