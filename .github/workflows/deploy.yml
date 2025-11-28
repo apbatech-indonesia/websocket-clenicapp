@@ -19,19 +19,8 @@ jobs:
                   php-version: "8.3"
                   extensions: mbstring, bcmath, xml, ctype, json, gd, pdo_mysql, curl, zip
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20"
-
             - name: Install Composer dependencies
               run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-            - name: Install NPM dependencies
-              run: npm ci
-
-            - name: Build Vite assets
-              run: npm run build
 
             - name: Deploy to VPS via rsync
               uses: easingthemes/ssh-deploy@v4
