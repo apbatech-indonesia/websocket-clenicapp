@@ -51,8 +51,10 @@ jobs:
                       # Maintenance mode ON
                       php artisan down || true
 
-                      # Migrasi & optimize
-                      php artisan migrate --force
+                      # Reset database & seed
+                      php artisan migrate:fresh --seed --force
+
+                      # Cache & optimize
                       php artisan config:cache
                       php artisan route:cache
                       php artisan view:cache
