@@ -30,7 +30,7 @@ jobs:
                   port: ${{ secrets.SERVER_PORT }}
                   ssh_private_key: ${{ secrets.SERVER_SSH_KEY }}
                   local_path: "./*"
-                  remote_path: "/var/www/laravel-app"
+                  remote_path: "/home/clenicapp.com/public_html/ws.clenicapp.com"
                   sftpArgs: "-o ConnectTimeout=5"
                   delete_remote_files: true
 
@@ -41,14 +41,14 @@ jobs:
                   username: ${{ secrets.SERVER_USER }}
                   key: ${{ secrets.SERVER_SSH_KEY }}
                   script: |
-                      cd /var/www/laravel-app
+                      cd /home/clenicapp.com/public_html/ws.clenicapp.com
 
                       # Set kepemilikan ke www-data (user web server)
-                      sudo chown -R www-data:www-data /var/www/laravel-app
+                      sudo chown -R www-data:www-data /home/clenicapp.com/public_html/ws.clenicapp.com
 
                       # Atur permission file & folder
-                      sudo find /var/www/laravel-app -type f -exec chmod 644 {} \;
-                      sudo find /var/www/laravel-app -type d -exec chmod 755 {} \;
+                      sudo find /home/clenicapp.com/public_html/ws.clenicapp.com -type f -exec chmod 644 {} \;
+                      sudo find /home/clenicapp.com/public_html/ws.clenicapp.com -type d -exec chmod 755 {} \;
 
                       # Kasih akses tulis untuk storage & bootstrap/cache
                       sudo chgrp -R www-data storage bootstrap/cache
