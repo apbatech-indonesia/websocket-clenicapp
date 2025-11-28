@@ -180,7 +180,7 @@
             broadcaster: 'pusher',
             key: 'local-key',
             cluster: 'mt1',
-            wsHost: window.location.hostname,
+            wsHost: window.location.hostname + '/socket',
             wsPort: 6001,
             forceTLS: false,
             disableStats: true,
