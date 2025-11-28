@@ -20,7 +20,9 @@ jobs:
                   extensions: mbstring, bcmath, xml, ctype, json, gd, pdo_mysql, curl, zip
 
             - name: Install Composer dependencies
-              run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+              run: |
+                  composer update --lock --no-interaction
+                  composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
             - name: Deploy to VPS via rsync
               uses: easingthemes/ssh-deploy@v5.0.3
