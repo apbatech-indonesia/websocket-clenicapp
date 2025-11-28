@@ -19,6 +19,9 @@ jobs:
                   php-version: "8.3"
                   extensions: mbstring, bcmath, xml, ctype, json, gd, pdo_mysql, curl, zip
 
+            - name: Install Composer dependencies
+              run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
             - name: Deploy to VPS via SFTP
               uses: wlixcc/SFTP-Deploy-Action@v1.2.4
               with:
@@ -41,27 +44,21 @@ jobs:
                   script: |
                       cd /home/clenicapp.com/public_html/ws.clenicapp.com
 
-                      # Use PHP 8.1 or higher (sesuaikan path PHP di server)
-                      export PATH=/usr/local/lsws/lsphp81/bin:$PATH
-
-                      # Install/update composer dependencies with PHP 8.1+
-                      /usr/local/lsws/lsphp81/bin/php /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
-
-                      # Set permission tanpa sudo (user harus punya akses)
+                      # Set permission
                       chmod -R 755 /home/clenicapp.com/public_html/ws.clenicapp.com
                       chmod -R 775 storage bootstrap/cache
 
                       # Maintenance mode ON
-                      /usr/local/lsws/lsphp81/bin/php artisan down || true
+                      php artisan down || true
 
                       # Migrasi & optimize
-                      /usr/local/lsws/lsphp81/bin/php artisan migrate --force
-                      /usr/local/lsws/lsphp81/bin/php artisan config:cache
-                      /usr/local/lsws/lsphp81/bin/php artisan route:cache
-                      /usr/local/lsws/lsphp81/bin/php artisan view:cache
-                      /usr/local/lsws/lsphp81/bin/php artisan storage:link
-                      /usr/local/lsws/lsphp81/bin/php artisan optimize:clear
-                      /usr/local/lsws/lsphp81/bin/php artisan optimize
+                      php artisan migrate --force
+                      php artisan config:cache
+                      php artisan route:cache
+                      php artisan view:cache
+                      php artisan storage:link
+                      php artisan optimize:clear
+                      php artisan optimize
 
                       # Maintenance mode OFF
-                      /usr/local/lsws/lsphp81/bin/php artisan up
+                      php artisan up
