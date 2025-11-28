@@ -1,4 +1,11 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On # Redirect to public folder RewriteCond %{REQUEST_URI}
-    !^/public/ RewriteRule ^(.*)$ public/$1 [L]
+    RewriteEngine On # Handle Authorization Header RewriteCond
+    %{HTTP:Authorization} . RewriteRule .* -
+    [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}] # Redirect Trailing Slashes If
+    Not A Folder RewriteCond %{REQUEST_FILENAME} !-d RewriteCond %{REQUEST_URI}
+    (.+)/$ RewriteRule ^ %1 [L,R=301] # Handle Front Controller (redirect semua
+    ke public/index.php) RewriteCond %{REQUEST_URI} !^/public/ RewriteCond
+    %{REQUEST_FILENAME} !-d RewriteCond %{REQUEST_FILENAME} !-f RewriteRule ^
+    public/index.php [L] # Redirect langsung ke public jika akses root
+    RewriteRule ^$ public/ [L] RewriteRule ^(?!public/)(.*)$ public/$1 [L]
 </IfModule>
