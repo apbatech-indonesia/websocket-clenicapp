@@ -37,9 +37,16 @@ jobs:
                   SCRIPT_AFTER: |
                       cd /home/clenicapp.com/public_html/ws.clenicapp.com
 
+                      # Create database directory if not exists
+                      mkdir -p database
+                      
+                      # Create SQLite database file if not exists
+                      touch database/database.sqlite
+
                       # Set permission
                       chmod -R 755 /home/clenicapp.com/public_html/ws.clenicapp.com
-                      chmod -R 775 storage bootstrap/cache
+                      chmod -R 775 storage bootstrap/cache database
+                      chmod 664 database/database.sqlite
 
                       # Maintenance mode ON
                       php artisan down || true
