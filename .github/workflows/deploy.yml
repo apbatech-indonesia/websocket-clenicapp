@@ -20,19 +20,27 @@ jobs:
                   extensions: mbstring, bcmath, xml, ctype, json, gd, pdo_mysql, curl, zip
 
             - name: Install Composer dependencies
-              run: composer install --no-interaction --prefer-dist --optimize-autoloader
+              run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-            - name: Deploy to VPS via rsync
-              uses: easingthemes/ssh-deploy@v4
+            - name: Deploy to VPS via SFTP
+              uses: wlixcc/SFTP-Deploy-Action@v1.2.4
               with:
-                  SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-                  REMOTE_HOST: ${{ secrets.SERVER_IP }}
-                  REMOTE_USER: ${{ secrets.SERVER_USER }}
-                  TARGET: /var/www/laravel-app
-                  SOURCE: .
-                  EXCLUDE: .env, storage, .git
-                  ARGS: -avz --delete
-                  SCRIPT_AFTER: |
+                  username: ${{ secrets.SERVER_USER }}
+                  server: ${{ secrets.SERVER_IP }}
+                  port: ${{ secrets.SERVER_PORT }}
+                  ssh_private_key: ${{ secrets.SERVER_SSH_KEY }}
+                  local_path: "./*"
+                  remote_path: "/var/www/laravel-app"
+                  sftpArgs: "-o ConnectTimeout=5"
+                  delete_remote_files: true
+
+            - name: Run deployment commands
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                  host: ${{ secrets.SERVER_IP }}
+                  username: ${{ secrets.SERVER_USER }}
+                  key: ${{ secrets.SERVER_SSH_KEY }}
+                  script: |
                       cd /var/www/laravel-app
 
                       # Set kepemilikan ke www-data (user web server)
